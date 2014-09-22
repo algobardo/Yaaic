@@ -40,7 +40,7 @@ android {
         targetSdkVersion 19
         applicationId 'org.yaaic'
         testApplicationId "org.yaaic.test"
-        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        testInstrumentationRunner 'com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner'
     }
 
     packagingOptions {
