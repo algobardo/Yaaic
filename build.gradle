@@ -1,0 +1,99 @@
+buildscript {
+    repositories {
+        maven { url "http://dl.bintray.com/populov/maven" } // for viewpagerindicator
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.10.+'
+        classpath 'com.crashlytics.examples.gradle:preprocessor:1.0.0'
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "http://dl.bintray.com/populov/maven" } // for viewpagerindicator
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+apply plugin: 'preprocessor'
+
+dependencies {
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.viewpagerindicator:library:2.4.1@aar'
+    compile fileTree(dir: 'application/libs', include: '*.jar')
+    compile fileTree(dir: 'test/libs', include: '*.jar')
+    androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 19
+        applicationId 'org.yaaic'
+        testApplicationId "org.yaaic.test"
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+
+    buildTypes {
+
+        // Enable code coverage
+
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'application/AndroidManifest.xml'
+            java.srcDirs = ['application/src']
+            resources.srcDirs = ['application/src']
+            aidl.srcDirs = ['application/src']
+            renderscript.srcDirs = ['application/src']
+            res.srcDirs = ['application/res']
+            assets.srcDirs = ['application/assets']
+        }
+
+        androidTest {
+            java.srcDirs = ['test/src']
+            resources.srcDirs = ['test/src']
+            aidl.srcDirs = ['test/src']
+            renderscript.srcDirs = ['test/src']
+            res.srcDirs = ['test/res']
+            assets.srcDirs = ['test/assets']
+        }
+    }
+}
+
+/*********************/
+/*** CODE COVERAGE ***/
+/*********************/
+
+allprojects {
+    
+    // Avoid VerifyError
+    
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.5
+        targetCompatibility = 1.5
+    }
+}
+
+task jacoco(dependsOn: "createDebugCoverageReport") {
+    group = "Reporting"
+
+    description = "Generate Jacoco coverage reports"
+}
