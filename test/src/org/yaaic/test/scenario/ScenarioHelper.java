@@ -27,7 +27,7 @@ import org.yaaic.activity.ServersActivity;
 import android.view.View;
 import android.widget.EditText;
 
-import com.jayway.android.robotium.solo.Solo;
+import android.test.Solo; // CQA, instead of robotium
 
 /**
  * Scenario helper for performing common actions
@@ -38,8 +38,7 @@ public class ScenarioHelper
 {
 	private Solo solo;
 
-	public ScenarioHelper(Solo solo)
-	{
+	public ScenarioHelper(Solo solo) {
 		this.solo = solo;
 	}
 
@@ -51,8 +50,7 @@ public class ScenarioHelper
 	 *
 	 * @param solo
 	 */
-	public void createTestServer()
-	{
+	public void createTestServer() {
 		if (!solo.searchText("RobotiumTest")) {
 			solo.assertCurrentActivity("Starting at ServersActivity", "ServersActivity");
 
@@ -87,8 +85,7 @@ public class ScenarioHelper
 	 *
 	 * @param solo
 	 */
-	public void connectToServer()
-	{
+	public void connectToServer() {
 		solo.clickOnText("RobotiumTest");
 
 		solo.waitForActivity("ConversationActivity", 3000);
@@ -105,8 +102,7 @@ public class ScenarioHelper
 	 *
 	 * @param solo
 	 */
-	public void disconnectFromServer()
-	{
+	public void disconnectFromServer() {
 		// Go back
 		solo.goBack();
 		solo.waitForActivity("ServersActivity", 2000);
@@ -128,8 +124,7 @@ public class ScenarioHelper
 	 *
 	 * @param solo
 	 */
-	public void deleteTestServer()
-	{
+	public void deleteTestServer() {
 		if (solo.searchText("RobotiumTest")) {
 			// Delete server again
 			solo.clickLongOnText("RobotiumTest");
@@ -148,8 +143,7 @@ public class ScenarioHelper
 	 *
 	 * @param solo
 	 */
-	public void joinTestChannel()
-	{
+	public void joinTestChannel() {
 		// Send join command
 		send("/j #yaaic-test");
 
@@ -166,8 +160,7 @@ public class ScenarioHelper
 	 * @param solo
 	 * @param message
 	 */
-	public void send(String message)
-	{
+	public void send(String message) {
 		solo.enterText(0, message);
 		solo.sendKey(Solo.ENTER);
 	}

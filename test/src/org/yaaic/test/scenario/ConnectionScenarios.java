@@ -24,45 +24,37 @@ package org.yaaic.test.scenario;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.test.Solo; // CQA, instead of robotium
 
-import com.jayway.android.robotium.solo.Solo;
+import org.yaaic.activity.ServersActivity;
 
 /**
  * Test scenarios including connecting to a server
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-@SuppressWarnings("rawtypes")
-public class ConnectionScenarios extends ActivityInstrumentationTestCase2
+public class ConnectionScenarios extends ActivityInstrumentationTestCase2<ServersActivity>
 {
 	private ScenarioHelper helper;
 	private Solo solo;
 	
 	/**
 	 * Create a new ConnectionScenario instance
-	 * 
-	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	public ConnectionScenarios() throws ClassNotFoundException
-	{
-		super(
-			"org.yaaic",
-			Class.forName("org.yaaic.activity.ServersActivity")
-		);
+	public ConnectionScenarios() {
+		super(ServersActivity.class);
 	}
 	
 	/**
 	 * Setup test case
 	 */
 	@Override
-	protected void setUp()
-	{
+	protected void setUp() throws Exception {
+		super.setUp(); // CQA
 		if (solo == null) {
 			solo   = new Solo(getInstrumentation(), getActivity());
 			helper = new ScenarioHelper(solo);
 		}
-		
 		helper.createTestServer();
 		helper.connectToServer();
 	}
@@ -71,12 +63,11 @@ public class ConnectionScenarios extends ActivityInstrumentationTestCase2
 	 * Cleanup after test
 	 */
 	@Override
-	protected void tearDown()
-	{
+	protected void tearDown() throws Exception {
 		helper.disconnectFromServer();
 		helper.deleteTestServer();
-		
 		solo.finishOpenedActivities();
+		super.tearDown(); // CQA
 	}
 	
 	/**
@@ -87,8 +78,7 @@ public class ConnectionScenarios extends ActivityInstrumentationTestCase2
 	 * - A new conversation with text #yaaic-test appears
 	 * - Disconnect
 	 */
-	public void testJoiningChannel()
-	{
+	public void testJoiningChannel() {
 		// Join channel
 		solo.enterText(0, "/j #yaaic-test");
 		solo.sendKey(Solo.ENTER);

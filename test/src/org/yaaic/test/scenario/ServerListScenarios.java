@@ -27,16 +27,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.EditText;
 
-import com.jayway.android.robotium.solo.Solo;
+import android.test.Solo; // CQA, instead of robotium
 
 /**
  * Scenario Tests for the ServersActivity
  * 
  * @author Sebastian Kaspari <s.kaspari@googlemail.com>
  */
-@SuppressWarnings("rawtypes")
-public class ServerListScenarios extends ActivityInstrumentationTestCase2
-{
+public class ServerListScenarios extends ActivityInstrumentationTestCase2<ServersActivity> {
 	private Solo solo;
 	private ScenarioHelper helper;
 	
@@ -45,18 +43,16 @@ public class ServerListScenarios extends ActivityInstrumentationTestCase2
 	 * 
 	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	public ServerListScenarios() throws ClassNotFoundException
-	{
-	    super("org.yaaic", ServersActivity.class);
+	public ServerListScenarios() {
+	    super(ServersActivity.class);
 	}
 	
 	/**
 	 * Setup test case
 	 */
 	@Override
-	protected void setUp()
-	{
+	protected void setUp() throws Exception {
+		super.setUp(); // CQA
 		if (solo == null) {
 			solo   = new Solo(getInstrumentation(), getActivity());
 			helper = new ScenarioHelper(solo);
@@ -67,9 +63,9 @@ public class ServerListScenarios extends ActivityInstrumentationTestCase2
 	 * Cleanup after run
 	 */
 	@Override
-	protected void tearDown()
-	{
+	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
+		super.tearDown(); // CQA
 	}
 
 	/**

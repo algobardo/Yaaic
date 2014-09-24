@@ -20,49 +20,39 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 */
 package org.yaaic.test.scenario;
 
-
-
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-import com.jayway.android.robotium.solo.Solo;
+import org.yaaic.activity.ServersActivity;
+
+import android.test.Solo; // CQA, instead of robotium
 
 /**
  * Scenarios regarding channels of a server
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-@SuppressWarnings("rawtypes")
-public class ChannelScenarios extends ActivityInstrumentationTestCase2
-{
+public class ChannelScenarios extends ActivityInstrumentationTestCase2<ServersActivity> {
 	private Solo solo;
 	private ScenarioHelper helper;
 	
 	/**
 	 * Create a new ChannelScenario instance
-	 * 
-	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	public ChannelScenarios() throws ClassNotFoundException
-	{
-		super(
-			"org.yaaic",
-			Class.forName("org.yaaic.activity.ServersActivity")
-		);
+	public ChannelScenarios() {
+		super(ServersActivity.class);
 	}
 	
 	/**
 	 * Setup test case
 	 */
 	@Override
-	protected void setUp()
-	{
+	protected void setUp() throws Exception {
+		super.setUp(); // CQA
 		if (solo == null) {
 			solo   = new Solo(getInstrumentation(), getActivity());
 			helper = new ScenarioHelper(solo);
 		}
-		
 		helper.createTestServer();
 		helper.connectToServer();
 	}
@@ -71,12 +61,11 @@ public class ChannelScenarios extends ActivityInstrumentationTestCase2
 	 * Cleanup after test
 	 */
 	@Override
-	protected void tearDown()
-	{
+	protected void tearDown() throws Exception {
 		helper.disconnectFromServer();
 		helper.deleteTestServer();
-		
 		solo.finishOpenedActivities();
+		super.tearDown(); // CQA
 	}
 	
 	/**
@@ -87,10 +76,8 @@ public class ChannelScenarios extends ActivityInstrumentationTestCase2
 	 * - Write a message
 	 * - The message is displayed in the view
 	 */
-	public void testSendingChannelMessage()
-	{
+	public void testSendingChannelMessage() {
 		helper.joinTestChannel();
-		
 		helper.send("Hello Test-World");
 		assertTrue(solo.searchText("<YaaicBotium> Hello Test-World"));
 	}
